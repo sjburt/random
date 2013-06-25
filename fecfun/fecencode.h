@@ -6,15 +6,16 @@
  *
  */
 
-typedef fecencoder* fecRef_t;
+
+typedef struct fecencoder* fecRef_t;
 
 typedef struct {
   uint8_t * data;
   uint32_t seqnum;
 } fecBlock_t;
 
-fecRef_t fenc_create(const char* data, int len, int block_size);
-int fenc_init(fecRef fec);
-int fenc_genBlock(fecRef fec, fecBlock_t * fecBlock);
+fecRef_t fenc_create(uint8_t* data, uint32_t len, uint16_t block_size);
+int fenc_init(fecRef_t fec);
+int fenc_genBlock(fecRef_t fec, fecBlock_t * fecBlock);
 
 

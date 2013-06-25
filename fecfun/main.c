@@ -6,12 +6,11 @@
 
 #include <stdio.h>
 #include <string.h>
-
-#include "fecfun.h"
+#include <stdint.h>
+#include "fecencode.h"
 
 int main(int argv, char**argc) {
 
-
-
-  return 0
+  printf("hi there");
+  return 0;
 }
