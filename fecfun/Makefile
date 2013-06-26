@@ -3,7 +3,7 @@ CFLAGS=-c -Wall -Werror
 SOURCES=main.c fecencode.c
 OBJECTS=$(SOURCES:.c=.o)
 TEST=
-CC=gcc
+CC=clang
 
 all: $(SOURCES) $(TARGET)
 	
