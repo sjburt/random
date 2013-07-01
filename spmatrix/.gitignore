@@ -1,3 +1,6 @@
 spmatrix_test
 spmatrix
 *.o
+*.gcov
+*.gcda
+*.gcno

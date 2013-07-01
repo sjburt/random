@@ -7,5 +7,6 @@ int main(int argv, char**argc) {
     printf("%s ", argc[i]);
   }
   printf("\n");
+  a_test_function(20);
   return 0;
 }
