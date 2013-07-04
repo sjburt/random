@@ -8,6 +8,5 @@ extern "C" {
 
 BOOST_AUTO_TEST_CASE( my_test) {
 
-  BOOST_CHECK_EQUAL(0, a_test_function(10));
 
 }

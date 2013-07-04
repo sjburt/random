@@ -1,9 +1,8 @@
 #include <stdio.h>
-
+#include <stdint.h>
 #include "spmatrix.h"
 
-
-int a_test_function(int an_int) {
-  printf("the number I was given is %i.\n", an_int);
-  return 0;
-}
+typedef struct Matrix {
+  uint32_t rows;
+  uint32_t columns;
+} Matrix;

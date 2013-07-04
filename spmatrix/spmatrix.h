@@ -1,1 +1,8 @@
-int a_test_function(int an_int);
+/* Sparse matrix lib
+ *
+ * For 2x2 matrices; indexed both by row and column
+ */
+
+typedef struct Matrix MatrixRef;
+
+MatrixRef matrix_init();

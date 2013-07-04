@@ -1,5 +1,6 @@
 spmatrix_test
 spmatrix
+set_test
 *.o
 *.gcov
 *.gcda

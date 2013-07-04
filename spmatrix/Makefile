@@ -6,10 +6,9 @@
 #when "make test" is run, will compile example.c and any mocks
 #using the c compiler, and example_test.cpp using the cpp compiler
 #then it links them all, and runs the test.
-#Note: not working for multiple test files in one dir yet :(
 TARGET=spmatrix
 MAIN=main.c
-SOURCES=spmatrix.c
+SOURCES=spmatrix.c set.c
 
 CFLAGS=-Wall -Werror -std=c99
 CPPFLAGS=-Wall -Werror
@@ -26,28 +25,36 @@ CC=gcc
 CPP=g++
 
 TESTER_OBJ = $(TESTS:.cpp=.o)
-TARGET_OBJ=$(TESTS:_test.cpp=_t.o)
+TARGET_OBJ = $(TESTS:_test.cpp=_t.o)
 MOCK_OBJ  =$(MOCKS:.c=_t.o)
+
+all: $(SOURCES) $(TARGET)
+
 $(MOCK_OBJ): $(MOCKS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(TARGET_OBJ): $(TESTS:_test.cpp=.c)
-	$(CC) $(TESTCFLAGS) $(CFLAGS) -c $< -o $@
+$(TARGET_OBJ): %_t.o : %_test.cpp
+	$(CC) $(TESTCFLAGS) $(CFLAGS) -c $(<:_test.cpp=.c) -o $@
 
-$(TESTER_OBJ): $(TESTS)
+$(TESTER_OBJ): %_test.o : %_test.cpp
 	$(CPP) $(CPPFLAGS) -c $< -o $@
 
-$(TEST_TARGET): $(TESTER_OBJ) $(TARGET_OBJ) $(MOCK_OBJ)
-	$(CPP) $(TEST_LD_FLAGS) -o $@ $(TESTER_OBJ) $(TARGET_OBJ) $(MOCK_OBJ) $(TEST_LIBS)
+$(TEST_TARGET): %_test : %_test.o %_t.o
+	$(CPP) $(TEST_LD_FLAGS) -o $@ $< $(<:_test.o=_t.o) $(MOCK_OBJ) $(TEST_LIBS)
+
+RAN_TESTS = $(TESTS:_test.cpp=.c.gcov)
+
+.PHONY: always
+$(RAN_TESTS) : %.c.gcov : %_test always
+	./$<
+	gcov $(@:.c.gcov=_t.o) 
+.PHONY: run_tests
+run_tests: $(RAN_TESTS)
 
 tests: $(TEST_TARGET)
-test: tests
-	./$(TEST_TARGET)
-	gcov $(TARGET_OBJ)
-clean:
-	rm -rf *.o *.gcno *.gcda *.gcov $(TARGET) $(TEST_TARGET)
-	
-all: $(SOURCES) $(TARGET)
+.PHONY: test
+test: tests run_tests  
+	@cowsay "Nominal"
 
 C_OBJECTS = $(SOURCES:.c=.o)
 MAIN_OBJECT=$(MAIN:.c=.o)
@@ -56,3 +63,8 @@ MAIN_OBJECT=$(MAIN:.c=.o)
 
 $(TARGET): $(C_OBJECTS) $(MAIN_OBJECT)
 	$(CC) $(LD_FLAGS) -o $@ $(MAIN_OBJECT) $(C_OBJECTS) 
+
+.PHONY: clean
+clean:
+	rm -rf *.o *.gcno *.gcda *.gcov $(TARGET) $(TEST_TARGET)
+	
