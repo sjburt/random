@@ -4,7 +4,6 @@
  *
  */
 
-
 #ifndef SET_H
 #define SET_H
 
@@ -28,13 +27,4 @@ SetRef Union(SetRef A, SetRef B);
 void printMembers(FILE* out, SetRef S);
 SetRef copySet(SetRef S);
 
-
-
-
-
-
-
-
 #endif // SET_H
-
-

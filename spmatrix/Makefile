@@ -33,7 +33,7 @@ all: $(SOURCES) $(TARGET)
 $(MOCK_OBJ): $(MOCKS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(TARGET_OBJ): %_t.o : %_test.cpp
+$(TARGET_OBJ): %_t.o : %_test.cpp %.c
 	$(CC) $(TESTCFLAGS) $(CFLAGS) -c $(<:_test.cpp=.c) -o $@
 
 $(TESTER_OBJ): %_test.o : %_test.cpp
@@ -47,7 +47,7 @@ RAN_TESTS = $(TESTS:_test.cpp=.c.gcov)
 .PHONY: always
 $(RAN_TESTS) : %.c.gcov : %_test always
 	./$<
-	gcov $(@:.c.gcov=_t.o) 
+	gcov $(@:.c.gcov=_t.o) -fb 
 .PHONY: run_tests
 run_tests: $(RAN_TESTS)
 

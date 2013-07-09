@@ -20,3 +20,10 @@ BOOST_AUTO_TEST_CASE(isitempty) {
   freeSet(&S);
   BOOST_REQUIRE_EQUAL(-1,isEmpty(S));
 }
+
+BOOST_AUTO_TEST_CASE(insert) {
+  SetRef S = newSet();
+  BOOST_REQUIRE_EQUAL(1,isEmpty(S));
+  Insert(S,  20);
+  printMembers(stdout,S);
+}

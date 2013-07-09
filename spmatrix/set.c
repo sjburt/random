@@ -44,23 +44,25 @@ int isEmpty(SetRef S) {
 static void resize(SetRef S) {
   int cs = S->size_of_array;
   int c = S->count;
-
+  printf("%i\n",sizeof(*S->data));
   if (c == cs) {
-    uint16_t* newArray = malloc( sizeof(*S->data) * c*2);
-    memcpy(newArray, S->data, c * sizeof(*S->data));
-    free(S->data);
-    S->data = newArray;
+    S->data = realloc(S->data, sizeof(*S->data) * c * 2);
   } else if (c < cs / 4 && cs > 200) {
   // shrink array back down
-    uint16_t* newArray = malloc( sizeof(*S->data) * c/2);
-    memcpy(newArray, S->data, c * sizeof(*S->data));
-    free(S->data);
-    S->data = newArray;
+    S->data = realloc(S->data, sizeof(*S->data) * c / 2);
   }
 }
 
 void Insert(SetRef S, int E) {
+  S->count++;
   resize(S);
+  S->data[S->count-1] = E;
+}
 
-
+void printMembers(FILE* out, SetRef S) {
+  fprintf(out, "(");
+  for(int i = 0; i < S->count; ++i){
+    fprintf(out, "%i, ", S->data[i]);
+  }
+  fprintf(out, ")\n");
 }
