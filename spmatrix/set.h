@@ -18,8 +18,8 @@ int getCount(SetRef S);
 int equals(SetRef A, SetRef B);
 
 void makeEmpty(SetRef S);
-void Insert(SetRef S, int E);
-void Remove(SetRef S, int E);
+void Insert(SetRef S, int16_t E);
+void Remove(SetRef S, int16_t E);
 
 SetRef Intersection(SetRef A, SetRef B);
 SetRef Union(SetRef A, SetRef B);

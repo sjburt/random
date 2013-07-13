@@ -4,11 +4,11 @@
 #include <string.h>
 #include "set.h"
 
-#define DEFAULT_SET_SIZE 50
+#define DEFAULT_SET_SIZE 10
 
 typedef struct Set {
   int count;
-  uint16_t *data;
+  int16_t *data;
   int size_of_array; // use to determine when we
                      // need to adjust size
 } Set;
@@ -42,21 +42,32 @@ int isEmpty(SetRef S) {
 }
 
 static void resize(SetRef S) {
-  int cs = S->size_of_array;
-  int c = S->count;
-  printf("%i\n",sizeof(*S->data));
-  if (c == cs) {
-    S->data = realloc(S->data, sizeof(*S->data) * c * 2);
-  } else if (c < cs / 4 && cs > 200) {
+  if (S->count == S->size_of_array) {
+    S->size_of_array *=2;
+    S->data = realloc(S->data, sizeof(*S->data) * S->size_of_array);
+    printf("embiggened to %i", S->size_of_array);
+  } else if ((S->count < S->size_of_array / 4) && S->size_of_array > DEFAULT_SET_SIZE) {
   // shrink array back down
-    S->data = realloc(S->data, sizeof(*S->data) * c / 2);
+    S->size_of_array = S->size_of_array / 2;
+    S->data = realloc(S->data, sizeof(*S->data) * S->size_of_array);
+    printf("ensmallered to %i", S->size_of_array);
   }
 }
 
-void Insert(SetRef S, int E) {
+int cmp_int(const void* a, const void* b){
+  const int16_t * A = a;
+  const int16_t * B = b;
+
+  if (*A < *B) return -1;
+  if (*A == *B) return 0;
+  return 1;
+}
+
+void Insert(SetRef S, int16_t E) {
   S->count++;
   resize(S);
   S->data[S->count-1] = E;
+  qsort(S->data, S->count, sizeof(*S->data), &cmp_int);
 }
 
 void printMembers(FILE* out, SetRef S) {
@@ -64,5 +75,5 @@ void printMembers(FILE* out, SetRef S) {
   for(int i = 0; i < S->count; ++i){
     fprintf(out, "%i, ", S->data[i]);
   }
-  fprintf(out, ")\n");
+  fprintf(out, "\b\b)\n");
 }

@@ -47,7 +47,7 @@ RAN_TESTS = $(TESTS:_test.cpp=.c.gcov)
 .PHONY: always
 $(RAN_TESTS) : %.c.gcov : %_test always
 	./$<
-	gcov $(@:.c.gcov=_t.o) -fb 
+	gcov $(@:.c.gcov=_t.o) -f 
 .PHONY: run_tests
 run_tests: $(RAN_TESTS)
 

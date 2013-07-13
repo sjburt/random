@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdio.h>
+#include <stdint.h>
 extern "C" {
 #include "set.h"
 }
@@ -25,5 +26,18 @@ BOOST_AUTO_TEST_CASE(insert) {
   SetRef S = newSet();
   BOOST_REQUIRE_EQUAL(1,isEmpty(S));
   Insert(S,  20);
-  printMembers(stdout,S);
+  Insert(S,  12);
+  Insert(S,  1);
+  Insert(S,  3);
+  freeSet(&S);
 }
+
+BOOST_AUTO_TEST_CASE(insertandresize) {
+  SetRef S = newSet();
+  for (int i=0; i<300; ++i) {
+    Insert(S,i);
+  }
+//  printMembers(stdout,S);
+  freeSet(&S);
+}
+
