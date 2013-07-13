@@ -63,12 +63,38 @@ int cmp_int(const void* a, const void* b){
   return 1;
 }
 
+static int16_t findEl(SetRef S, int16_t E) {
+  int16_t * Eref;
+  Eref = bsearch(&E, S->data, S->count, sizeof(*S->data), cmp_int);
+  if (NULL!=Eref) {
+    return (Eref - S->data);
+  }
+  return -1;
+}
+
 void Insert(SetRef S, int16_t E) {
+  if (findEl(S,E) != -1) return;
   S->count++;
   resize(S);
   S->data[S->count-1] = E;
+  // todo: actually insert instead of this junk!
   qsort(S->data, S->count, sizeof(*S->data), &cmp_int);
 }
+
+
+void Remove(SetRef S, int16_t E) {
+  int16_t addr;
+  if ((addr = findEl(S,E)) == -1 ) return;
+  printf("%i \n",addr);
+  memmove(&S->data[addr],&S->data[addr+1], (S->count - addr)*sizeof(*S->data));
+  S->count--;
+  resize(S);
+}
+
+
+
+
+
 
 void printMembers(FILE* out, SetRef S) {
   fprintf(out, "(");

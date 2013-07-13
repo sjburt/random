@@ -29,6 +29,9 @@ BOOST_AUTO_TEST_CASE(insert) {
   Insert(S,  12);
   Insert(S,  1);
   Insert(S,  3);
+  printMembers(stdout,S);
+  Insert(S,  3);
+  printMembers(stdout,S);
   freeSet(&S);
 }
 
@@ -38,6 +41,22 @@ BOOST_AUTO_TEST_CASE(insertandresize) {
     Insert(S,i);
   }
 //  printMembers(stdout,S);
+  freeSet(&S);
+}
+
+BOOST_AUTO_TEST_CASE(remove_test) {
+  SetRef S = newSet();
+  BOOST_REQUIRE_EQUAL(1,isEmpty(S));
+  Insert(S,  20);
+  Insert(S,  12);
+  Insert(S,  1);
+  Insert(S,  3);
+  printMembers(stdout,S);
+  Remove(S,  3);
+  Remove(S,  3);
+  Remove(S,  20);
+  printMembers(stdout,S);
+
   freeSet(&S);
 }
 
