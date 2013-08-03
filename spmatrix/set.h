@@ -13,9 +13,9 @@ SetRef newSet(void);
 void freeSet(SetRef* pS);
 
 int isEmpty(SetRef S);
-int hasMember(SetRef S);
+int hasMember(SetRef S, int16_t E);
 int getCount(SetRef S);
-int equals(SetRef A, SetRef B);
+int Equals(SetRef A, SetRef B);
 
 void makeEmpty(SetRef S);
 void Insert(SetRef S, int16_t E);
