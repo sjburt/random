@@ -39,6 +39,11 @@ void matrix_free(MatrixRef* M) {
   for (int i = 0; i < (*M)->columns; i++) {
     freeSet(&(*M)->cdata[i]);
   }
+  
+  free((*M)->rdata);
+  free((*M)->cdata);
+
+
   free(*M);
   M=NULL;
 }
@@ -55,23 +60,39 @@ void matrix_print(FILE* out, MatrixRef M) {
     }
     fprintf(out, "\n");
   }
-
-
 }
 
-void matrix_add(MatrixRef M, int16_t row, int16_t column) {
+int matrix_add(MatrixRef M, int16_t row, int16_t column) {
+  if (row >= M->rows) return -1;
+  if (column >= M->columns) return -1;
+
   Insert(M->rdata[row], column);
   Insert(M->cdata[column], row);
+
+  return 0;
 }
 
-void matrix_rem(MatrixRef M, int16_t row, int16_t column) {
+int matrix_rem(MatrixRef M, int16_t row, int16_t column) {
+  if (row >= M->rows) return -1;
+  if (column >= M->columns) return -1;
+
   Remove(M->rdata[row], column);
   Remove(M->cdata[column], row);
+
+  return 0;
 }
 
 MatrixRef matrix_transpose(MatrixRef M) {
   MatrixRef N = matrix_init(M->columns, M->rows);
 
+  for (int ri = 0; ri < N->rows; ri++) {
+    freeSet(&N->rdata[ri]);
+    N->rdata[ri] = copySet(M->cdata[ri]);
+  }
+  for (int ci = 0; ci < N->columns; ci++) {
+    freeSet(&N->cdata[ci]);
+    N->cdata[ci] = copySet(M->rdata[ci]);
+  }
   return N;
 
 }
