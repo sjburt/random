@@ -11,6 +11,8 @@ typedef struct Matrix {
   SetRef* cdata;
 } Matrix;
 
+typedef struct Set Row;
+
 
 MatrixRef matrix_init(int16_t rows, int16_t columns) {
 
@@ -94,5 +96,19 @@ MatrixRef matrix_transpose(MatrixRef M) {
     N->cdata[ci] = copySet(M->rdata[ci]);
   }
   return N;
+}
 
+RowRef copy_row(MatrixRef M, uint16_t row) {
+  if (row >= M->rows) return NULL;
+
+  RowRef R = (RowRef)copySet(M->rdata[row]);
+
+  return R;
+}
+
+SetRef row_xor(const SetRef A, const SetRef B) {
+  SetRef R = newSet();
+
+
+  return R;
 }

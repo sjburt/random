@@ -4,6 +4,7 @@
  */
 
 typedef struct Matrix* MatrixRef;
+typedef struct Row* RowRef;
 
 MatrixRef matrix_init(int16_t rows, int16_t columns);
 void matrix_free(MatrixRef* M);
